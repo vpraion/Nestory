@@ -1,19 +1,24 @@
 package main
 
 import (
-	"fmt"
+	"Nestory/internal/api"
 	"log"
 	"net/http"
+	"os"
 )
 
 func main() {
+	port := os.Getenv("PORT")
+
+	router := api.NewRouter()
+
 	server := &http.Server{
-		Addr: ":8080",
+		Addr:    ":" + port,
+		Handler: router,
 	}
 
-	fmt.Println("Server listening on 8080")
+	log.Printf("Server listening on :%s", port)
 	if err := server.ListenAndServe(); err != nil {
 		log.Fatalf("Server error: %v", err)
 	}
-
 }
