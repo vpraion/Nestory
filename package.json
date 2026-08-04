@@ -1,0 +1,15 @@
+{
+  "name": "nestory",
+  "version": "0.0.0",
+  "description": "Nestory aims to be a web app (single page application) where you quickly edit what you have in stock at home whether it's food and track their expiration or other consumables (such as shampoo, toothpaste, etc.)",
+  "license": "ISC",
+  "author": "vpraion",
+  "devDependencies": {
+    "@commitlint/cli": "^21.2.1",
+    "@commitlint/config-conventional": "^21.2.0",
+    "husky": "^9.1.7"
+  },
+  "scripts": {
+    "prepare": "husky"
+  }
+}
