@@ -15,7 +15,6 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           scan-type: "config"
-          hide-shortcut-be-key: true # Hides promotional banners in CI logs
           exit-code: "1"
           severity: "CRITICAL,HIGH"
 
