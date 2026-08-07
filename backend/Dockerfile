@@ -23,6 +23,7 @@ COPY --from=builder --chown=appuser:appuser /app/server .
 USER appuser
 
 ARG APP_PORT=8080
+ENV APP_PORT=${APP_PORT}}
 
 EXPOSE ${APP_PORT}
 
