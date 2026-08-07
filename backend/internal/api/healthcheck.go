@@ -8,6 +8,6 @@ type HealthResponse struct {
 }
 
 // HealthHandler handles HTTP GET requests to inspect server health status.
-func healthHandler(w http.ResponseWriter, r *http.Request) {
+func healthHandler(w http.ResponseWriter, _ *http.Request) {
 	respondJSON(w, http.StatusOK, HealthResponse{Status: "ok"})
 }
