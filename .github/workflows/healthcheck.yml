@@ -1,0 +1,34 @@
+name: Healthcheck Test
+
+on:
+  workflow_call:
+
+jobs:
+  healthcheck:
+    name: Backend Healthcheck
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v7
+
+      - name: Create and Load .env
+        run: |
+          cp .env.example .env
+          cat .env >> $GITHUB_ENV
+
+      - name: Download Docker Image Artifact
+        uses: actions/download-artifact@v7
+        with:
+          name: backend-docker-image
+
+      - name: Unpack and load Docker Image
+        run: |
+          gunzip -c backend-image.tar.gz | docker load
+
+      # Start backend container and --wait for native Dockerfile HEALTHCHECK
+      - name: Start backend container & verify healthcheck
+        run: docker compose up -d --wait backend
+
+      - name: Stop containers
+        if: always()
+        run: docker compose down

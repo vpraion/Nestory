@@ -1,0 +1,38 @@
+name: Trivy Security Scan
+
+on:
+  workflow_call:
+
+jobs:
+  trivy-scan:
+    name: Trivy Security Audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v7
+      # Scan config (Dockerfiles & compose.yml)
+      - name: Run Trivy Config Scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: "config"
+          hide-shortcut-be-key: true # Hides promotional banners in CI logs
+          exit-code: "1"
+          severity: "CRITICAL,HIGH"
+
+      - name: Download Docker Image Artifact
+        uses: actions/download-artifact@v7
+        with:
+          name: backend-docker-image
+
+      - name: Unpack and load Docker Image
+        run: |
+          gunzip -c backend-image.tar.gz | docker load
+
+      - name: Run Trivy Image Scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: "nestory-backend:latest"
+          format: "table"
+          exit-code: "1"
+          ignore-unfixed: true
+          severity: "CRITICAL,HIGH"

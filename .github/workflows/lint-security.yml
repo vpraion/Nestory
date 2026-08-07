@@ -1,0 +1,31 @@
+name: Lint & Security
+
+# Triggers
+on:
+  workflow_call:
+
+# Jobs
+jobs:
+  lint-go:
+    name: Go Lint & Security (gosec)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v7
+
+      - name: Setup Go
+        uses: actions/setup-go@v7
+        with:
+          go-version-file: "backend/go.mod"
+          cache: false
+
+      - name: Run golangci-lint (Format, Quality & Gosec)
+        uses: golangci/golangci-lint-action@v9
+        with:
+          working-directory: backend
+
+      - name: Run govulncheck (Go CVEs)
+        uses: golang/govulncheck-action@v1
+        with:
+          go-version-file: "backend/go.mod"
+          working-directory: backend
