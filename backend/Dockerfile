@@ -26,7 +26,7 @@ ARG APP_PORT=8080
 
 EXPOSE ${APP_PORT}
 
-HEALTHCHECK --interval=30s --timeout=3s --retries=3 CMD wget -qO- http://localhost:${APP_PORT}/healthz || exit 1
+HEALTHCHECK --start-period=1s --interval=2s --timeout=3s --retries=3 CMD wget -qO- http://localhost:${APP_PORT}/healthz || exit 1
 
 CMD ["./server"]
 
