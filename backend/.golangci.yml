@@ -1,0 +1,34 @@
+# yaml-language-server: $schema=https://golangci-lint.run/jsonschema/golangci.jsonschema.json
+
+version: "2"
+
+run:
+  timeout: 5m
+
+formatters:
+  enable:
+    - goimports # Auto-formats and organizes imports
+    - gofumpt # Strict formatter (includes gofmt + extra rules)
+
+linters:
+  enable:
+    # --- Code Quality & Best Practices ---
+    - govet # Official Go analyzer for common bugs
+    - staticcheck # Advanced quality and bug detection
+    - revive # Fast linter for style and naming conventions
+    - ineffassign # Detects unused variable assignments
+    - errcheck # Ensures returned errors are handled
+    - unused # Detects dead/unused code
+
+    # --- Security (SAST) ---
+    - gosec # Scans Go AST for security vulnerabilities
+
+  settings:
+    gosec:
+      severity: "medium" # Filter out low severity issues
+      confidence: "medium" # Avoid false positives
+    revive:
+      enable-default-rules: true
+      rules:
+        - name: package-comments
+          disabled: true
