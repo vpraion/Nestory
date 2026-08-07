@@ -29,6 +29,11 @@ jobs:
       - name: Start backend container & verify healthcheck
         run: docker compose up -d --wait backend
 
+      # Show container logs if healthcheck fails
+      - name: Print container logs on failure
+        if: failure()
+        run: docker compose logs backend
+
       - name: Stop containers
         if: always()
         run: docker compose down
