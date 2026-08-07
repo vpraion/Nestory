@@ -1,18 +1,13 @@
 package api
 
-import (
-	"encoding/json"
-	"net/http"
-)
+import "net/http"
 
+// HealthResponse represents the payload returned by the healthcheck endpoint.
 type HealthResponse struct {
 	Status string `json:"status"`
 }
 
-func HealthHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(HealthResponse{
-		Status: "ok",
-	})
+// HealthHandler handles HTTP GET requests to inspect server health status.
+func healthHandler(w http.ResponseWriter, _ *http.Request) {
+	respondJSON(w, http.StatusOK, HealthResponse{Status: "ok"})
 }

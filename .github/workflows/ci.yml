@@ -1,0 +1,25 @@
+name: CI Pipeline
+
+# Triggers
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Jobs
+jobs:
+  lint-and-security:
+    uses: ./.github/workflows/lint-security.yml
+
+  build:
+    needs: [lint-and-security]
+    uses: ./.github/workflows/build.yml
+
+  trivy-scan:
+    needs: [build]
+    uses: ./.github/workflows/trivy.yml
+
+  healthcheck:
+    needs: [trivy-scan]
+    uses: ./.github/workflows/healthcheck.yml

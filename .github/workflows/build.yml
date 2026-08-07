@@ -1,36 +1,26 @@
-name: Build & Run Server
+name: Build
 
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+  workflow_call:
 
 jobs:
-  build:
-    name: Build go executable & healthcheck
+  build-docker:
+    name: Build Docker Image
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v7
 
-      - name: Create and Load .env
+      - name: Build backend Docker Image
+        # Build the image and and compress it
         run: |
-          cp .env.example .env
-          cat .env >> $GITHUB_ENV
+          docker build -t nestory-backend:latest ./backend
+          docker save nestory-backend:latest | gzip > backend-image.tar.gz
 
-      - name: Build the go executable
-        run: make build-backend
-
-      - name: Start backend container
-        run: make run-backend
-
-      - name: Test healthcheck endpoint
-        run: |
-          curl --fail --retry 5 --retry-connrefused --retry-delay 2 http://localhost:${BACKEND_HOST_PORT}/healthz
-
-      - name: Stop containers
-        if: always()
-        run: make down
+      # Upload the compressed image artifact for upcoming jobs
+      - name: Upload Docker Image Artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: backend-docker-image
+          path: backend-image.tar.gz
+          retention-days: 1
