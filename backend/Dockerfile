@@ -12,11 +12,20 @@ RUN CGO_ENABLED=0 GOOS=linux go build -o server main.go
 # Stage 2 : runner
 FROM golang:tip-alpine3.24 AS runner
 
+RUN adduser -D -u 10001 appuser
+RUN chown -R appuser:appuser /app
+
 WORKDIR /app
 
-COPY --from=builder /app/server .
+COPY --from=builder --chown=appuser:appuser /app/server .
 
-EXPOSE 8080
+USER appuser
+
+ARG APP_PORT=8080
+
+EXPOSE ${APP_PORT}
+
+HEALTHCHECK --interval=30s --timeout=3s --retries=3 CMD wget -qO- http://localhost:${APP_PORT}/healthz || exit 1
 
 CMD ["./server"]
 

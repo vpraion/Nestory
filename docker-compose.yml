@@ -7,20 +7,14 @@ services:
       dockerfile: Dockerfile
       target: builder
   backend:
+    image: nestory-backend:latest
     build:
       context: ./backend
       dockerfile: Dockerfile
       target: runner
+      args:
+        - APP_PORT=${BACKEND_CONTAINER_PORT}
     environment:
       - PORT=${BACKEND_CONTAINER_PORT}
     ports:
       - ${BACKEND_HOST_PORT}:${BACKEND_CONTAINER_PORT}
-    healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "wget -qO http://localhost:${BACKEND_CONTAINER_PORT}/healthz || exit 1",
-        ]
-      interval: 30s
-      timeout: 3s
-      retries: 3
