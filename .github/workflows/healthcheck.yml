@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 
       - name: Create and Load .env
         run: |
@@ -17,7 +17,7 @@ jobs:
           cat .env >> $GITHUB_ENV
 
       - name: Download Docker Image Artifact
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3
         with:
           name: backend-docker-image
 

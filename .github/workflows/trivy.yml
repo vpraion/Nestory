@@ -9,17 +9,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       # Scan config (Dockerfiles & compose.yml)
       - name: Run Trivy Config Scan
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@2736533278103862a861f4a35ebac3e97854d956
         with:
           scan-type: "config"
           exit-code: "1"
           severity: "CRITICAL,HIGH"
 
       - name: Download Docker Image Artifact
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3
         with:
           name: backend-docker-image
 
@@ -28,7 +28,7 @@ jobs:
           gunzip -c backend-image.tar.gz | docker load
 
       - name: Run Trivy Image Scan
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@2736533278103862a861f4a35ebac3e97854d956
         with:
           image-ref: "nestory-backend:latest"
           format: "table"
