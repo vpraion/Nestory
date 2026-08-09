@@ -5,6 +5,9 @@ on:
     - cron: "0 2 * * *" # 02:00 AM UTC
   workflow_dispatch: # Allows manual run through GH Interface
 
+permissions:
+  contents: read
+
 jobs:
   lint-and-security:
     uses: ./.github/workflows/lint-security.yml
